@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres-db
+    environment:
+      POSTGRES_DB: db-docker-training
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+    ports:
+#      - "5432:5432"
+       - "0.0.0.0:5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql-16/data
+    networks:
+      - java-pg
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  java-pg:
+    external: true
+    name: myjava-pg
