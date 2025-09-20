@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres-db-3
+    environment:
+      POSTGRES_DB: db-docker-training
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+    ports:
+      - "0.0.0.0:5432:5432"
+    volumes:
+      - /home/pg_data:/var/lib/postgresql/data
+    networks:
+      - java-pg
+    restart: unless-stopped
+
+  redis:
+    image: redis:latest
+    container_name: my-redis-instance
+    restart: always
+    ports:
+      - "0.0.0.0:6379:6379"
+    volumes:
+      - /home/redis_data:/data
+    command: redis-server --requirepass admin --appendonly yes
+    networks:
+      - java-pg
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  java-pg:
+    external: true
+    name: myjava-pg

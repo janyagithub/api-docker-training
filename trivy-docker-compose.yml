@@ -1,0 +1,8 @@
+version: '3.8'
+services:
+  trivy:
+    image: aquasec/trivy
+    command: image --format json --output /report/api-docker-training-scan.json api-docker-training
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./trivy-reports:/report
